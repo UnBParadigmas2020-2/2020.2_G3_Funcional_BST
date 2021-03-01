@@ -10,6 +10,9 @@ module Tree
     treeDelete,
     treeHeight,
     isBalanced,
+    stackValues,
+    deleteSeveral,
+    searchInTree,
   )
 where
 
@@ -26,13 +29,10 @@ toDataTree (No x (Null, right)) = Node x [toDataTree right]
 toDataTree (No x (left, right)) = Node x [toDataTree left, toDataTree right]
 
 tree :: BinaryTree [Char]
-tree = No "b" (No "a" (Null, Null), No "c" (Null, Null))
+tree = No "m" (No "g" (No "d" (Null, Null), No "j" (Null, Null)), No "t" (No "p" (Null, Null), No "w" (Null, Null)))
 
 printTree :: BinaryTree [Char] -> IO ()
 printTree x = putStrLn $ drawVerticalTree (toDataTree x)
-
-insertSeveral :: (Ord a) => [a] -> BinaryTree a -> BinaryTree a
-insertSeveral x (No y (left, right)) = foldr insertOnTree (No y (left, right)) $ reverse x
 
 insertOnTree :: (Ord a) => a -> BinaryTree a -> BinaryTree a
 insertOnTree x Null = No x (Null, Null)
@@ -40,6 +40,9 @@ insertOnTree x (No y (left, right))
   | x == y = No y (left, right)
   | x < y = No y (insertOnTree x left, right)
   | x > y = No y (left, insertOnTree x right)
+
+insertSeveral :: (Ord a) => [a] -> BinaryTree a -> BinaryTree a
+insertSeveral x (No y (left, right)) = foldr insertOnTree (No y (left, right)) $ reverse x
 
 searchInTree :: (Ord a) => a -> BinaryTree a -> Bool
 searchInTree _ Null = False
@@ -60,17 +63,14 @@ treeDelete x (No y (left, right))
     newItem = treeMax left
     newLeft = treeDelete newItem left
 
-treeMax :: (Eq a) => BinaryTree a -> a
-treeMax (No x (_, right)) =
-  if right /= Null
-    then treeMax right
-    else x
+deleteSeveral :: (Ord a) => [a] -> BinaryTree a -> BinaryTree a
+deleteSeveral x (No y (left, right)) = foldr treeDelete (No y (left, right)) $ reverse x
 
 treeHeight :: (Num p, Ord p) => BinaryTree a -> p
 treeHeight Null = 0
 treeHeight (No x (left, right)) = 1 + max (treeHeight left) (treeHeight right)
 
-isBalanced :: BinaryTree a -> Bool 
+isBalanced :: BinaryTree a -> Bool
 isBalanced Null = True
 isBalanced (No x (left, right)) = abs (treeHeight left - treeHeight right) <= 1 && isBalanced left && isBalanced right
 
@@ -85,6 +85,25 @@ preOrder (No x (left, right)) = [x] ++ preOrder left ++ preOrder right
 postOrder :: BinaryTree a -> [a]
 postOrder Null = []
 postOrder (No x (left, right)) = postOrder left ++ postOrder right ++ [x]
+
+-- Auxiliary Functions
+
+stackValues :: IO [String]
+stackValues = do
+  input <- getLine
+  if null input
+    then return []
+    else do
+      moreInputs <- stackValues
+      return (input : moreInputs)
+
+treeMax :: (Eq a) => BinaryTree a -> a
+treeMax (No x (_, right)) =
+  if right /= Null
+    then treeMax right
+    else x
+
+-- Unused
 
 {-saveTree :: (Show a) => BinaryTree a -> IO ()
 saveTree x = do
