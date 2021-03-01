@@ -34,7 +34,7 @@ Na sequência, execute os comandos ```cabal update``` e ```cabal install pretty-
 Por último, compile o projeto com o comando ```ghc Main.hs -o main``` e execute o output com ```./main```.
 
 ## Vídeo
-Adicione 1 ou mais vídeos com a execução do projeto.
+O vídeo pode ser encontrado na pasta **assets/video.mp4**.
 
 ## Outros 
 - A árvore base utilizada como exemplo é *hard-coded* e imutável. Após cada comando, ela volta ao formato base.
