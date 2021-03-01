@@ -1,98 +1,104 @@
-module Tree where
+module Tree
+  ( BinaryTree,
+    tree,
+    printTree,
+    inOrder,
+    insertSeveral,
+    insertOnTree,
+    preOrder,
+    postOrder,
+    treeDelete,
+    treeHeight,
+    isBalanced,
+  )
+where
 
 import Data.Tree (Tree (Node))
 import Data.Tree.Pretty (drawVerticalTree)
-import System.IO (IOMode (WriteMode), hClose, hPrint, openFile)
 
 data BinaryTree a = Null | No a (BinaryTree a, BinaryTree a)
   deriving (Eq, Read, Ord, Show)
 
 toDataTree :: BinaryTree a -> Data.Tree.Tree a
-toDataTree (No a (Null, Null)) = Node a []
-toDataTree (No a (left, Null)) = Node a [toDataTree left]
-toDataTree (No a (Null, right)) = Node a [toDataTree right]
-toDataTree (No a (left, right)) = Node a [toDataTree left, toDataTree right]
+toDataTree (No x (Null, Null)) = Node x []
+toDataTree (No x (left, Null)) = Node x [toDataTree left]
+toDataTree (No x (Null, right)) = Node x [toDataTree right]
+toDataTree (No x (left, right)) = Node x [toDataTree left, toDataTree right]
 
 tree :: BinaryTree [Char]
-tree = No "k" (No "f" (No "d" (No "c" (Null, Null), No "e" (Null, Null)), No "h" (Null, Null)), No "o" (Null, Null))
+tree = No "b" (No "a" (Null, Null), No "c" (Null, Null))
 
 printTree :: BinaryTree [Char] -> IO ()
 printTree x = putStrLn $ drawVerticalTree (toDataTree x)
 
+insertSeveral :: (Ord a) => [a] -> BinaryTree a -> BinaryTree a
+insertSeveral x (No y (left, right)) = foldr insertOnTree (No y (left, right)) $ reverse x
+
 insertOnTree :: (Ord a) => a -> BinaryTree a -> BinaryTree a
 insertOnTree x Null = No x (Null, Null)
-insertOnTree x (No a (left, right))
-  | x == a = No a (left, right)
-  | x < a = No a (insertOnTree x left, right)
-  | x > a = No a (left, insertOnTree x right)
+insertOnTree x (No y (left, right))
+  | x == y = No y (left, right)
+  | x < y = No y (insertOnTree x left, right)
+  | x > y = No y (left, insertOnTree x right)
 
-inTree :: Ord a => BinaryTree a -> a -> Bool
-inTree Empty _ = False
-inTree (No left x right) y = if x == y then True
-	else
-		if y < x then inTree left y
-			else inTree right y
+searchInTree :: (Ord a) => a -> BinaryTree a -> Bool
+searchInTree _ Null = False
+searchInTree y (No x (left, right))
+  | x == y = True
+  | y < x = searchInTree y left
+  | otherwise = searchInTree y right
 
+treeDelete :: (Ord a) => a -> BinaryTree a -> BinaryTree a
+treeDelete x Null = Null
+treeDelete x (No y (left, right))
+  | x < y = No y (treeDelete x left, right)
+  | x > y = No y (left, treeDelete x right)
+  | left == Null = right
+  | right == Null = left
+  | otherwise = No newItem (newLeft, right)
+  where
+    newItem = treeMax left
+    newLeft = treeDelete newItem left
 
-delete :: Ord a => BinaryTree a -> a -> BinaryTree a
-delete t@(No left x right) y = if inTree t y 
-	then
-		if y < x 
-		then (No (delete left y) x right)
-		else 
-			if y > x
-			then (No left x (delete right y))
-			else deleteNode t
-	else t
-
-deleteNode :: Ord a => BinaryTree a -> BinaryTree a
-deleteNode (No left x right) = if left == Empty 
-	then right
-	else
-		if right == Empty
-		then left
-		else (No left (leftMost right) (update right))
-
-leftMost :: Ord a => BinaryTree a -> a
-leftMost (No Empty x _) = x
-leftMost (No left x _) = leftMost left
-
-update :: Ord a => BinaryTree a -> BinaryTree a
-update Empty = Empty
-update t@(No left x right) =  if x == (leftMost t)
-	then delete t x
-	else 
-		if x < (leftMost t) 
-		then No left x (update right)
-			else No (update left) x right
-
-search :: Ord a => a -> BinaryTree a -> Bool
-search a (No b) = compare a b == EQ
-search a (No left b right) 
-  case compare a b of 
-    EQ -> True
-    LT -> search a left
-    GT -> search a right
+treeMax :: (Eq a) => BinaryTree a -> a
+treeMax (No x (_, right)) =
+  if right /= Null
+    then treeMax right
+    else x
 
 treeHeight :: (Num p, Ord p) => BinaryTree a -> p
 treeHeight Null = 0
 treeHeight (No x (left, right)) = 1 + max (treeHeight left) (treeHeight right)
 
+isBalanced :: BinaryTree a -> Bool 
+isBalanced Null = True
+isBalanced (No x (left, right)) = abs (treeHeight left - treeHeight right) <= 1 && isBalanced left && isBalanced right
+
 inOrder :: BinaryTree a -> [a]
 inOrder Null = []
-inOrder (No a (left, right)) = inOrder left ++ [a] ++ inOrder right
+inOrder (No x (left, right)) = inOrder left ++ [x] ++ inOrder right
 
 preOrder :: BinaryTree a -> [a]
 preOrder Null = []
-preOrder (No a (left, right)) = [a] ++ preOrder left ++ preOrder right
+preOrder (No x (left, right)) = [x] ++ preOrder left ++ preOrder right
 
 postOrder :: BinaryTree a -> [a]
 postOrder Null = []
-postOrder (No a (left, right)) = postOrder left ++ postOrder right ++ [a]
+postOrder (No x (left, right)) = postOrder left ++ postOrder right ++ [x]
 
-saveTree :: IO ()
-saveTree = do
+{-saveTree :: (Show a) => BinaryTree a -> IO ()
+saveTree x = do
   output <- openFile "tree.txt" WriteMode
-  hPrint output (inOrder tree)
-  hPrint output (preOrder tree)
+  hPrint output (inOrder x)
+  hPrint output (preOrder x)
   hClose output
+
+retrieveLists :: IO ([Char], [Char])
+retrieveLists = do
+  s <- readFile "tree.txt"
+  let a = read (take ((length (filterString s) `div` 2) - 1) (filterString s))
+  let b = read (take ((length (filterString s) `div` 2) - 1) (drop (length (filterString s) `div` 2) (filterString s)))
+  return (a, b)
+
+filterString :: [Char] -> [Char]
+filterString = filter (not . (`elem` ".?!-:;\"\'"))-}
