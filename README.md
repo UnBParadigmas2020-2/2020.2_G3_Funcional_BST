@@ -1,4 +1,4 @@
-# PlaceHolder
+# Binary Search Tree
 
 **Disciplina**: FGA0210 - PARADIGMAS DE PROGRAMAÇÃO - T01 <br>
 **Nro do Grupo**: 3<br>
@@ -11,7 +11,7 @@
 | 17/0163571  |  Murilo Loiola Dantas |
 
 ## Sobre 
-Descreva o seu projeto em linhas gerais. 
+O projeto implementa arvores binárias, e algumas das principais funções dessa estrutura de dados, utilizando o Paradigma de Programação Funcional, com a linguagem Haskell. 
 
 ## Screenshots
 Adicione 2 ou mais screenshots do projeto em termos de interface e/ou funcionamento.
