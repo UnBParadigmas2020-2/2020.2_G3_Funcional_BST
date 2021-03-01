@@ -26,6 +26,46 @@ insertOnTree x (No a (left, right))
   | x < a = No a (insertOnTree x left, right)
   | x > a = No a (left, insertOnTree x right)
 
+inTree :: Ord a => BinaryTree a -> a -> Bool
+inTree Empty _ = False
+inTree (No left x right) y = if x == y then True
+	else
+		if y < x then inTree left y
+			else inTree right y
+
+
+delete :: Ord a => BinaryTree a -> a -> BinaryTree a
+delete t@(No left x right) y = if inTree t y 
+	then
+		if y < x 
+		then (No (delete left y) x right)
+		else 
+			if y > x
+			then (No left x (delete right y))
+			else deleteNode t
+	else t
+
+deleteNode :: Ord a => BinaryTree a -> BinaryTree a
+deleteNode (No left x right) = if left == Empty 
+	then right
+	else
+		if right == Empty
+		then left
+		else (No left (leftMost right) (update right))
+
+leftMost :: Ord a => BinaryTree a -> a
+leftMost (No Empty x _) = x
+leftMost (No left x _) = leftMost left
+
+update :: Ord a => BinaryTree a -> BinaryTree a
+update Empty = Empty
+update t@(No left x right) =  if x == (leftMost t)
+	then delete t x
+	else 
+		if x < (leftMost t) 
+		then No left x (update right)
+			else No (update left) x right
+
 treeHeight :: (Num p, Ord p) => BinaryTree a -> p
 treeHeight Null = 0
 treeHeight (No x (left, right)) = 1 + max (treeHeight left) (treeHeight right)
