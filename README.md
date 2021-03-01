@@ -1,4 +1,4 @@
-# BST
+# Binary Search Tree
 
 **Disciplina**: FGA0210 - PARADIGMAS DE PROGRAMAÇÃO - T01 <br>
 **Nro do Grupo**: 3<br>
@@ -11,7 +11,7 @@
 | 17/0163571  |  Murilo Loiola Dantas |
 
 ## Sobre 
-O projeto fornece uma série de funções básicas de árvores binárias de busca. As funções podem ser testadas facilmente através de um menu interativo.
+O projeto fornece uma série de funções de árvores binárias de busca. As funções podem ser testadas facilmente através de um menu interativo.
 
 ## Screenshots
 ### Menu
