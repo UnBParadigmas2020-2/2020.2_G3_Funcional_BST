@@ -7,7 +7,7 @@ module Tree
     insertOnTree,
     preOrder,
     postOrder,
-    treeDelete,
+    deleteNode,
     treeHeight,
     isBalanced,
     stackValues,
@@ -51,20 +51,20 @@ searchInTree y (No x (left, right))
   | y < x = searchInTree y left
   | otherwise = searchInTree y right
 
-treeDelete :: (Ord a) => a -> BinaryTree a -> BinaryTree a
-treeDelete x Null = Null
-treeDelete x (No y (left, right))
-  | x < y = No y (treeDelete x left, right)
-  | x > y = No y (left, treeDelete x right)
+deleteNode :: (Ord a) => a -> BinaryTree a -> BinaryTree a
+deleteNode x Null = Null
+deleteNode x (No y (left, right))
+  | x < y = No y (deleteNode x left, right)
+  | x > y = No y (left, deleteNode x right)
   | left == Null = right
   | right == Null = left
   | otherwise = No newItem (newLeft, right)
   where
     newItem = treeMax left
-    newLeft = treeDelete newItem left
+    newLeft = deleteNode newItem left
 
 deleteSeveral :: (Ord a) => [a] -> BinaryTree a -> BinaryTree a
-deleteSeveral x (No y (left, right)) = foldr treeDelete (No y (left, right)) $ reverse x
+deleteSeveral x (No y (left, right)) = foldr deleteNode (No y (left, right)) $ reverse x
 
 treeHeight :: (Num p, Ord p) => BinaryTree a -> p
 treeHeight Null = 0

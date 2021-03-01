@@ -2,6 +2,7 @@ module Main where
 
 import Menu (menu)
 import System.Exit (exitSuccess)
+import System.IO (hFlush, stdout)
 import Tree
   ( BinaryTree,
     deleteSeveral,
@@ -12,61 +13,65 @@ import Tree
     postOrder,
     preOrder,
     printTree,
+    searchInTree,
     stackValues,
     tree,
-    treeDelete,
+    deleteNode,
     treeHeight,
-    searchInTree,
   )
 
 main :: IO ()
 main = do
   menu
+  hFlush stdout
   temp <- getLine
-  putStr "\n"
+  putStrLn ""
   case temp of
     "1" -> printTree tree
     "2" -> do
       putStr "Elemento a ser inserido: "
+      hFlush stdout
       value <- getLine
-      putStr "\n"
+      putStrLn ""
       printTree (insertOnTree value tree)
     "3" -> do
       putStr "Elementos a serem inseridos\n(um elemento por linha, linha em branco para encerrar inserção): "
+      hFlush stdout
       value <- stackValues
-      putStr "\n"
       printTree (insertSeveral value tree)
     "4" -> do
       putStr "Elemento a ser deletado: "
+      hFlush stdout
       value <- getLine
-      putStr "\n"
-      printTree (treeDelete value tree)
+      putStrLn ""
+      printTree (deleteNode value tree)
     "5" -> do
       putStr "Elementos a serem deletados\n(um elemento por linha, linha em branco para encerrar inserção): "
+      hFlush stdout
       value <- stackValues
-      putStr "\n"
       printTree (deleteSeveral value tree)
     "6" -> do
       putStr "Elemento a ser procurado: "
+      hFlush stdout
       value <- getLine
-      putStr "\n"
+      putStrLn ""
       print (searchInTree value tree)
-      putStr "\n"
+      putStrLn ""
     "7" -> do
       print (inOrder tree)
-      putStr "\n"
+      putStrLn ""
     "8" -> do
       print (preOrder tree)
-      putStr "\n"
+      putStrLn ""
     "9" -> do
       print (postOrder tree)
-      putStr "\n"
+      putStrLn ""
     "10" -> do
       print (treeHeight tree)
-      putStr "\n"
+      putStrLn ""
     "11" -> do
       print (isBalanced tree)
-      putStr "\n"
+      putStrLn ""
     "12" -> exitSuccess
     _ -> putStrLn "Entrada inválida.\n"
   main

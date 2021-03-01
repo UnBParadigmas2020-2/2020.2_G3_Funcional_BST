@@ -1,4 +1,4 @@
-# PlaceHolder
+# BST
 
 **Disciplina**: FGA0210 - PARADIGMAS DE PROGRAMAÇÃO - T01 <br>
 **Nro do Grupo**: 3<br>
@@ -11,25 +11,33 @@
 | 17/0163571  |  Murilo Loiola Dantas |
 
 ## Sobre 
-Descreva o seu projeto em linhas gerais. 
+O projeto fornece uma série de funções básicas de árvores binárias de busca. As funções podem ser testadas facilmente através de um menu interativo.
 
 ## Screenshots
-Adicione 2 ou mais screenshots do projeto em termos de interface e/ou funcionamento.
+### Menu
+
+![](./assets/menu.png)
+
+### Árvore base
+
+![](./assets/arvore.png)
+
+### Árvore após inserção múltipla
+
+![](./assets/insercao.png)
 
 ## Instalação 
-**Linguagens**: xxxxxx<br>
-**Tecnologias**: xxxxxx<br>
-Descreva os pré-requisitos para rodar o seu projeto e os comandos necessários.
-Insira um manual ou um script para auxiliar ainda mais.
-
-## Uso 
-Explique como usar seu projeto, caso haja algum passo a passo após o comando de execução.
+**Linguagens**: Haskell<br>
+**Tecnologias**: Cabal<br>
+Para instalar as dependências, será necessário ter o gerenciador de pacotes Cabal instalado. Para verificar se ele já está instalado, utilize o comando ```cabal --version```. Caso não esteja instalado, siga as instruções [aqui](https://cabal.readthedocs.io/en/3.4/getting-started.html).</br>
+Na sequência, execute os comandos ```cabal update``` e ```cabal install pretty-tree```, nesta ordem.</br>
+Por último, compile o projeto com o comando ```ghc Main.hs -o main``` e execute o output com ```./main```.
 
 ## Vídeo
 Adicione 1 ou mais vídeos com a execução do projeto.
 
 ## Outros 
-Quaisquer outras informações sobre seu projeto podem ser descritas a seguir.
+- A árvore base utilizada como exemplo é *hard-coded* e imutável. Após cada comando, ela volta ao formato base.
 
 ## Fontes
-Caso utilize materiais de terceiros, referencie-os adequadamente.
+[Learn You a Haskell For Greater Good!](http://learnyouahaskell.com/chapters)
