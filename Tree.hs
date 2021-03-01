@@ -26,6 +26,10 @@ insertOnTree x (No a (left, right))
   | x < a = No a (insertOnTree x left, right)
   | x > a = No a (left, insertOnTree x right)
 
+treeHeight :: (Num p, Ord p) => BinaryTree a -> p
+treeHeight Null = 0
+treeHeight (No x (left, right)) = 1 + max (treeHeight left) (treeHeight right)
+
 inOrder :: BinaryTree a -> [a]
 inOrder Null = []
 inOrder (No a (left, right)) = inOrder left ++ [a] ++ inOrder right
