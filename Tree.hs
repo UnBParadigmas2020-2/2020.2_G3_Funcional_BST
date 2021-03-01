@@ -1,8 +1,8 @@
 module Tree where
 
-import System.IO
 import Data.Tree (Tree (Node))
 import Data.Tree.Pretty (drawVerticalTree)
+import System.IO (IOMode (WriteMode), hClose, hPrint, openFile)
 
 data BinaryTree a = Null | No a (BinaryTree a, BinaryTree a)
   deriving (Eq, Read, Ord, Show)
@@ -13,14 +13,11 @@ toDataTree (No a (left, Null)) = Node a [toDataTree left]
 toDataTree (No a (Null, right)) = Node a [toDataTree right]
 toDataTree (No a (left, right)) = Node a [toDataTree left, toDataTree right]
 
-tempTree :: BinaryTree [Char]
-tempTree = No "100" (No "50" (No "25" (No "14" (Null, Null), No "20" (Null, Null)), Null), No "150" (Null, Null))
+tree :: BinaryTree [Char]
+tree = No "k" (No "f" (No "d" (No "c" (Null, Null), No "e" (Null, Null)), No "h" (Null, Null)), No "o" (Null, Null))
 
-treeFormat :: Tree [Char]
-treeFormat = toDataTree tempTree
-
-printTree :: IO ()
-printTree = putStrLn $ drawVerticalTree treeFormat
+printTree :: BinaryTree [Char] -> IO ()
+printTree x = putStrLn $ drawVerticalTree (toDataTree x)
 
 insertOnTree :: (Ord a) => a -> BinaryTree a -> BinaryTree a
 insertOnTree x Null = No x (Null, Null)
@@ -43,7 +40,7 @@ postOrder (No a (left, right)) = postOrder left ++ postOrder right ++ [a]
 
 saveTree :: IO ()
 saveTree = do
-    output <- openFile "tree.txt" WriteMode
-    hPrint output (inOrder tempTree)
-    hPrint output (preOrder tempTree)
-    hClose output
+  output <- openFile "tree.txt" WriteMode
+  hPrint output (inOrder tree)
+  hPrint output (preOrder tree)
+  hClose output
