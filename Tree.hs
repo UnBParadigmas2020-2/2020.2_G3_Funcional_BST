@@ -66,6 +66,14 @@ update t@(No left x right) =  if x == (leftMost t)
 		then No left x (update right)
 			else No (update left) x right
 
+search :: Ord a => a -> BinaryTree a -> Bool
+search a (No b) = compare a b == EQ
+search a (No left b right) 
+  case compare a b of 
+    EQ -> True
+    LT -> search a left
+    GT -> search a right
+
 treeHeight :: (Num p, Ord p) => BinaryTree a -> p
 treeHeight Null = 0
 treeHeight (No x (left, right)) = 1 + max (treeHeight left) (treeHeight right)
