@@ -40,4 +40,5 @@ O vídeo pode ser encontrado na pasta **assets/video.mp4**.
 - A árvore base utilizada como exemplo é *hard-coded* e imutável. Após cada comando, ela volta ao formato base.
 
 ## Fontes
-[Learn You a Haskell For Greater Good!](http://learnyouahaskell.com/chapters)
+[Learn You a Haskell For Greater Good!](http://learnyouahaskell.com/chapters)</br>
+[Repositório no GitHub com algumas funções de BST](https://gist.github.com/jason2506/2243143)
